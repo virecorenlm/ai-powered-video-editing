@@ -1,0 +1,49 @@
+paths:
+  input_dir: "./input"
+  output_dir: "./output"
+  temp_dir: "./temp"
+  log_file: "./logs/pipeline.log"
+
+watcher:
+  file_extensions: [".mp4", ".mov", ".mkv", ".avi"]
+  debounce_seconds: 5
+
+ffmpeg:
+  executable: "ffmpeg"
+  ffprobe_executable: "ffprobe"
+  target_width: 1080
+  target_height: 1920
+  video_bitrate: "6M"
+  audio_bitrate: "160k"
+  audio_codec: "aac"
+  video_codec: "h264"
+  preset: "veryfast"
+  crf: 20
+  silence_filter: "silenceremove=stop_periods=-1:stop_duration=0.3:stop_threshold=-35dB"
+  enable_zoom_punch_in: true
+  zoom_factor: 1.1
+
+transcription:
+  model_size: "small"        # CPU-friendly
+  device: "cpu"              # CPU only
+  compute_type: "int8"       # optimized for CPU
+  language: null
+  beam_size: 3
+  vad_filter: true
+
+ollama:
+  base_url: "http://localhost:11434"
+  model: "deepseek-v3.1:671b-cloud"
+  timeout_seconds: 180
+  max_retries: 3
+
+clips:
+  min_length_seconds: 30.0
+  max_length_seconds: 60.0
+  max_clips_per_video: 5
+
+subtitles:
+  font_size: 36
+  font_color: "white"
+  outline_color: "black"
+  outline_width: 2
