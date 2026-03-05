@@ -1,0 +1,56 @@
+
+
+Create and activate a virtualenv (PowerShell example):
+   python -m venv .venv   .venv\Scripts\Activate.ps1
+Install dependencies:
+   pip install -r requirements.txt
+Create runtime folders:
+   mkdir input   mkdir output   mkdir temp   mkdir logs
+3. Configuration
+Key parts of config.yaml:
+CPU transcription:
+  transcription:    model_size: "small"    device: "cpu"    compute_type: "int8"    beam_size: 3    vad_filter: true
+Ollama:
+  ollama:    base_url: "http://localhost:11434"    model: "deepseek-v3.1:671b-cloud"
+Clips:
+  clips:    min_length_seconds: 30.0    max_length_seconds: 60.0    max_clips_per_video: 5
+ffmpeg:
+9:16 vertical output: target_width: 1080, target_height: 1920
+Silence removal via silenceremove
+Optional zoom punch-in via enable_zoom_punch_in and zoom_factor.
+Adjust these values to taste.
+4. Running
+Start Ollama and ensure the model is available.
+Run the pipeline:
+   python main.py
+Drop a supported video (.mp4, .mov, .mkv, .avi) into the input folder.
+The pipeline will:
+Probe the video with ffprobe.
+Transcribe with faster-whisper.
+Ask Ollama to:
+Identify strongest hooks in the first 30 seconds.
+Detect emotional spikes.
+Detect curiosity loops.
+Return clips as JSON:
+     {       "clips": [         { "start": 12.5, "end": 48.2, "reason": "Strong emotional hook" }       ]     }
+For each suggested clip:
+Generate a per-clip .srt file.
+Use ffmpeg to:
+crop to 9:16 center,
+remove silence gaps (audio),
+burn in subtitles,
+apply zoom punch-in (if enabled),
+encode to H.264/AAC.
+Save the final clip into output.
+Logs appear in console and in logs/pipeline.log.
+5. Notes
+CPU-only means transcription will be slower for long videos; small + int8 is a good balance.
+To speed up further:
+Use model_size: "tiny" or "base".
+Reduce beam_size in config.yaml.
+If Ollama fails or returns invalid JSON, check logs/pipeline.log for details.
+6. Quick Test
+Place a short test .mp4 into input.
+Watch the logs for transcription and Ollama activity.
+Check output for generated vertical clips.
+If you want, next step I can help you add features like multiple workers, progress estimates, or different clip style presets.
