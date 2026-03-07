@@ -48,7 +48,7 @@ output/my-video_clip02_Emotional_peak.mp4
 ## Installation
 
 ```bash
-git clone https://github.com/yournameVirecoreNLM/ai-powered-video-editing.git
+git clone https://github.com/VirecoreNLM/ai-powered-video-editing.git
 cd ai-powered-video-editing
 
 python3 -m venv .venv
