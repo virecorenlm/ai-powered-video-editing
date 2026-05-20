@@ -186,6 +186,19 @@ transcription:
 
 ---
 
+
+### Quick sanity check
+
+Run a lightweight local sanity pass before processing videos:
+
+```bash
+./sanity_check.sh
+```
+
+This verifies Python syntax by compiling the core modules and runs `pytest -q` (treated as success if no tests are discovered).
+
+---
+
 ## Troubleshooting
 
 **No clips produced**
